@@ -1,0 +1,46 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int main() {
+    FILE *fptr;
+    char input[100];
+    char ch;
+    clock_t start, end;
+    double time_taken;
+
+    start = clock();  // Start timing
+
+    // Write to file
+    fptr = fopen("output.txt", "w");  // O(1)
+    if (fptr == NULL) {
+        printf("Error opening file.\n");
+        return 1;
+    }
+
+    printf("Enter a line of text: ");
+    fgets(input, sizeof(input), stdin);  // O(n)
+
+    fprintf(fptr, "%s", input);  // O(n)
+    fclose(fptr);  // O(1)
+
+    // Read from file
+    fptr = fopen("output.txt", "r");  // O(1)
+    if (fptr == NULL) {
+        printf("Error opening file for reading.\n");
+        return 1;
+    }
+
+    printf("\nContents of the file:\n");
+    while ((ch = fgetc(fptr)) != EOF) {  // O(n)
+        putchar(ch);
+    }
+    fclose(fptr);  // O(1)
+
+    end = clock();  // End timing
+
+    time_taken = ((double)(end - start)) / CLOCKS_PER_SEC;
+    printf("\n\nExecution Time: %f seconds\n", time_taken);
+
+    return 0;
+}
